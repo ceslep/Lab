@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lab/pages/pacientes.dart';
 
 class HomeLaboratorio extends StatefulWidget {
   const HomeLaboratorio({super.key, required this.title});
@@ -19,10 +20,6 @@ class HomeLaboratorio extends StatefulWidget {
 }
 
 class _HomeLaboratorioState extends State<HomeLaboratorio> {
-  void _incrementCounter() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -41,7 +38,13 @@ class _HomeLaboratorioState extends State<HomeLaboratorio> {
             mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Pacientes(),
+              ));
+        },
         tooltip: 'Agregar Paciente',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
