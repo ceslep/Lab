@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lab/pages/crear_examen.dart';
 import 'package:lab/pages/pacientes.dart';
 
 class HomeLaboratorio extends StatefulWidget {
@@ -37,17 +38,42 @@ class _HomeLaboratorioState extends State<HomeLaboratorio> {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[]),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Pacientes(),
-              ));
-        },
-        tooltip: 'Agregar Paciente',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 0,
+            backgroundColor: Colors.amber,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CrearExamen(),
+                  ));
+            },
+            tooltip: 'Agregar Examen',
+            child: const Icon(
+              Icons.health_and_safety,
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          FloatingActionButton(
+            heroTag: 1,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Pacientes(),
+                  ));
+            },
+            tooltip: 'Agregar Paciente',
+            child: const Icon(Icons.add),
+          ),
+        ],
+      ),
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
