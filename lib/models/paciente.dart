@@ -13,6 +13,7 @@ class Paciente {
   final String? identificacion;
   final String? nombres;
   final String? apellidos;
+  final String? fecnac;
   final String? telefono;
   final String? correo;
   final String? genero;
@@ -22,6 +23,7 @@ class Paciente {
     this.identificacion,
     this.nombres,
     this.apellidos,
+    this.fecnac,
     this.telefono,
     this.correo,
     this.genero,
@@ -32,6 +34,7 @@ class Paciente {
         identificacion: json["identificacion"],
         nombres: json["nombres"],
         apellidos: json["apellidos"],
+        fecnac: json['fecnac'],
         telefono: json["telefono"],
         correo: json["correo"],
         genero: json["genero"],
@@ -42,6 +45,7 @@ class Paciente {
         "identificacion": identificacion,
         "nombres": nombres,
         "apellidos": apellidos,
+        "fecnac": fecnac,
         "telefono": telefono,
         "correo": correo,
         "genero": genero,

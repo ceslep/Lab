@@ -7,6 +7,7 @@ import 'package:lab/pages/home_laboratorio.dart';
 import 'package:lab/providers/url_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:desktop_window/desktop_window.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 const String titleApp = 'Laboratorio';
 void main() {
@@ -28,10 +29,19 @@ void main() {
   }
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -44,6 +54,13 @@ class MainApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const HomeLaboratorio(title: titleApp),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('es'),
+        ],
       ),
     );
   }
