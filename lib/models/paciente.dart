@@ -17,6 +17,7 @@ class Paciente {
   final String? telefono;
   final String? correo;
   final String? genero;
+  final String? entidad;
 
   Paciente({
     this.id,
@@ -27,6 +28,7 @@ class Paciente {
     this.telefono,
     this.correo,
     this.genero,
+    this.entidad,
   });
 
   factory Paciente.fromJson(Map<String, dynamic> json) => Paciente(
@@ -34,10 +36,11 @@ class Paciente {
         identificacion: json["identificacion"],
         nombres: json["nombres"],
         apellidos: json["apellidos"],
-        fecnac: json['fecnac'],
+        fecnac: json["fecnac"],
         telefono: json["telefono"],
         correo: json["correo"],
         genero: json["genero"],
+        entidad: json["entidad"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,5 +52,6 @@ class Paciente {
         "telefono": telefono,
         "correo": correo,
         "genero": genero,
+        "entidad": entidad,
       };
 }

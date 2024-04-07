@@ -1,13 +1,9 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:lab/api/get_paciente.dart';
 import 'package:lab/models/paciente.dart';
-import 'package:lab/providers/url_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class CrearExamen extends StatefulWidget {
   const CrearExamen({super.key});

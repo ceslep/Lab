@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:lab/api/get_paciente.dart';
+import 'package:lab/functions/select_date.dart';
+import 'package:lab/functions/show_toast.dart';
 import 'package:lab/models/paciente.dart';
 import 'package:lab/providers/url_provider.dart';
-import 'package:lab/widgets/toastmsg.dart';
+import 'package:lab/widgets/date_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,6 +34,7 @@ class _PacientesState extends State<Pacientes> {
   final TextEditingController _correoController = TextEditingController();
   final TextEditingController _fecnacController = TextEditingController(
       text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
+  final TextEditingController _entidadController = TextEditingController();
 
   String _genero = '';
   String fecha = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -61,19 +64,6 @@ class _PacientesState extends State<Pacientes> {
 
   final focusNode = FocusNode();
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1930),
-      lastDate: DateTime(2225),
-    );
-    if (pickedDate != null) {
-      _fecnacController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-      fecha = _fecnacController.text;
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -91,6 +81,7 @@ class _PacientesState extends State<Pacientes> {
           _genero = paciente.genero!;
           _telefonoController.text = paciente.telefono!;
           _correoController.text = paciente.correo!;
+          _entidadController.text = paciente.entidad!;
           setState(() {});
         }
       }
@@ -99,14 +90,16 @@ class _PacientesState extends State<Pacientes> {
 
   Future<bool> guardarPaciente() async {
     Paciente paciente = Paciente(
-        id: NativeRuntime.buildId.toString(),
-        identificacion: _identificacionController.text,
-        nombres: _nombresController.text,
-        apellidos: _apellidosController.text,
-        fecnac: _fecnacController.text,
-        genero: _genero,
-        telefono: _telefonoController.text,
-        correo: _correoController.text);
+      id: NativeRuntime.buildId.toString(),
+      identificacion: _identificacionController.text,
+      nombres: _nombresController.text,
+      apellidos: _apellidosController.text,
+      fecnac: _fecnacController.text,
+      genero: _genero,
+      telefono: _telefonoController.text,
+      correo: _correoController.text,
+      entidad: _entidadController.text,
+    );
     final urlProvider = Provider.of<UrlProvider>(context, listen: false);
     Uri url = Uri.parse('${urlProvider.url}savePaciente.php');
     final bodyData = json.encode(paciente.toJson());
@@ -123,30 +116,6 @@ class _PacientesState extends State<Pacientes> {
     }
   }
 
-  Future<void> showToastB(
-    String message, {
-    ToastGravity gravity = ToastGravity.TOP,
-    int milliseconds = 1000,
-    Color bacgroundColor = Colors.white,
-  }) async {
-    final toast = Toastmsg(
-      message: message,
-      toast: fToast,
-      backgroundColor: bacgroundColor,
-      frontColor: Colors.black,
-    );
-
-    // Await a Timer to simulate async behavior (optional)
-    await Future.delayed(Duration(milliseconds: milliseconds));
-
-    // Show the toast directly inside the future
-    fToast.showToast(
-      child: toast,
-      gravity: gravity,
-      toastDuration: const Duration(seconds: 2),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -154,13 +123,35 @@ class _PacientesState extends State<Pacientes> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: const Text(
           'Crear Paciente',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+          ),
         ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
         ),
         actions: [
+          IconButton(
+            onPressed: () {
+              _identificacionController.clear();
+              _nombresController.clear();
+              _apellidosController.clear();
+              _fecnacController.clear();
+              _genero = '';
+              _telefonoController.clear();
+              _correoController.clear();
+              _entidadController.clear();
+              setState(() {});
+            },
+            icon: const Icon(
+              Icons.new_label_rounded,
+              color: Colors.white,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
@@ -203,7 +194,9 @@ class _PacientesState extends State<Pacientes> {
                 keyboardType: const TextInputType.numberWithOptions(),
                 textCapitalization: TextCapitalization.characters,
               ),
-              const SizedBox(height: 18.0),
+              const SizedBox(
+                height: 18.0,
+              ),
               TextField(
                 controller: _nombresController,
                 decoration: const InputDecoration(
@@ -216,7 +209,9 @@ class _PacientesState extends State<Pacientes> {
                 ),
                 textCapitalization: TextCapitalization.characters,
               ),
-              const SizedBox(height: 18.0),
+              const SizedBox(
+                height: 18.0,
+              ),
               TextField(
                 controller: _apellidosController,
                 decoration: const InputDecoration(
@@ -224,15 +219,19 @@ class _PacientesState extends State<Pacientes> {
                   hintText: 'Apellidos del paciente',
                   label: Text(
                     'Apellidos',
-                    style: TextStyle(color: Colors.green),
+                    style: TextStyle(
+                      color: Colors.green,
+                    ),
                   ),
                 ),
                 textCapitalization: TextCapitalization.characters,
               ),
-              const SizedBox(height: 18.0),
+              const SizedBox(
+                height: 18.0,
+              ),
               Padding(
                 padding: const EdgeInsets.all(0),
-                child: _buildDatePicker(),
+                child: buildDatePicker(context, _fecnacController),
               ),
               const SizedBox(
                 height: 18.0,
@@ -275,6 +274,19 @@ class _PacientesState extends State<Pacientes> {
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
+              const SizedBox(height: 18),
+              TextField(
+                controller: _entidadController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Entidad del paciente',
+                  label: Text(
+                    'Entidad',
+                    style: TextStyle(color: Colors.green),
+                  ),
+                ),
+                keyboardType: TextInputType.emailAddress,
+              ),
               const SizedBox(
                 height: 36.0,
               ),
@@ -309,36 +321,25 @@ class _PacientesState extends State<Pacientes> {
   }
 
   void guardaPaciente() async {
+    if (_identificacionController.text == '') {
+      showToastB(
+        fToast,
+        'Ingrese la información correcta',
+        milliseconds: 50,
+        bacgroundColor: Colors.redAccent,
+      );
+      return;
+    }
     setState(() => guardando = !guardando);
     bool save = await guardarPaciente();
     if (save) {
-      await showToastB('Paciente Registrado Correctamente',
+      await showToastB(fToast, 'Paciente Registrado Correctamente',
           bacgroundColor: Colors.lightGreen);
       Navigator.pop(context);
     } else {
-      showToastB('Ha ocurido un error. Intentelo nuevamente más tarde.');
+      showToastB(
+          fToast, 'Ha ocurido un error. Intentelo nuevamente más tarde.');
     }
     setState(() => guardando = !guardando);
-  }
-
-  Widget _buildDatePicker() {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: TextField(
-            controller: _fecnacController,
-            readOnly: true,
-            decoration: const InputDecoration(
-                labelText: 'Fecha de Nacimiento',
-                border: OutlineInputBorder(),
-                labelStyle: TextStyle(color: Colors.green)),
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.calendar_today),
-          onPressed: () => _selectDate(context),
-        ),
-      ],
-    );
   }
 }
