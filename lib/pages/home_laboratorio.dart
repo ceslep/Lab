@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lab/pages/crear_examen.dart';
-import 'package:lab/pages/pacientes.dart';
-import 'package:lab/widgets/date_picker.dart';
+import 'package:lab/pages/lista_pacientes.dart';
+
+import '../widgets/home/home_fl.dart';
 
 class HomeLaboratorio extends StatefulWidget {
   const HomeLaboratorio({super.key, required this.title});
@@ -23,52 +23,24 @@ class _HomeLaboratorioState extends State<HomeLaboratorio> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: buildDatePicker(context, _fechaController)),
-            ]),
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: 0,
-            backgroundColor: Colors.amber,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CrearExamen(),
-                  ));
-            },
-            tooltip: 'Agregar Examen',
-            child: const Icon(
-              Icons.health_and_safety,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ListaPacientes(),
+                    ));
+              },
+              icon: const Icon(Icons.group, color: Colors.white),
             ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          FloatingActionButton(
-            heroTag: 1,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Pacientes(),
-                  ));
-            },
-            tooltip: 'Agregar Paciente',
-            child: const Icon(Icons.add),
           ),
         ],
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
+      body: BodyHome(fechaController: _fechaController),
+      floatingActionButton: const FloatingActionButtonHome(),
     );
   }
 }

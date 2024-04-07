@@ -43,6 +43,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   fluttertoast: ^8.2.4
+  flutter_text_form_field: ^1.0.5
 
 dev_dependencies:
   flutter_test:

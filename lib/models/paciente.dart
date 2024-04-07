@@ -32,15 +32,15 @@ class Paciente {
   });
 
   factory Paciente.fromJson(Map<String, dynamic> json) => Paciente(
-        id: json["id"],
-        identificacion: json["identificacion"],
-        nombres: json["nombres"],
-        apellidos: json["apellidos"],
-        fecnac: json["fecnac"],
-        telefono: json["telefono"],
-        correo: json["correo"],
-        genero: json["genero"],
-        entidad: json["entidad"],
+        id: json["id"].toString(),
+        identificacion: json["identificacion"].toString(),
+        nombres: json["nombres"].toString(),
+        apellidos: json["apellidos"].toString(),
+        fecnac: json["fecnac"].toString(),
+        telefono: json["telefono"].toString(),
+        correo: json["correo"].toString(),
+        genero: json["genero"].toString(),
+        entidad: json["entidad"].toString(),
       );
 
   Map<String, dynamic> toJson() => {

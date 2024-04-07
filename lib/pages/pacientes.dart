@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:lab/api/get_paciente.dart';
-import 'package:lab/functions/select_date.dart';
 import 'package:lab/functions/show_toast.dart';
 import 'package:lab/models/paciente.dart';
 import 'package:lab/providers/url_provider.dart';
 import 'package:lab/widgets/date_picker.dart';
+import 'package:lab/widgets/text_fieldi.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -38,6 +38,11 @@ class _PacientesState extends State<Pacientes> {
 
   String _genero = '';
   String fecha = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  int identificaCount = 0;
+  bool identificacionValida = false;
+  bool nombresValido = false;
+  bool apellidosValido = false;
+  bool telefonoValido = false;
 
   List<String> genero = [
     'Seleccione el genero del paciente',
@@ -179,52 +184,53 @@ class _PacientesState extends State<Pacientes> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextField(
+              TextFieldi(
                 focusNode: focusNode,
-                autofocus: true,
                 controller: _identificacionController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Ingrese una identificación válida',
-                  label: Text(
-                    'Identificación',
-                    style: TextStyle(color: Colors.green),
-                  ),
-                ),
+                count: 6,
+                color: Colors.green,
+                hintText: 'Ingrese la Identificación del paciente',
+                field: 'Identificación',
                 keyboardType: const TextInputType.numberWithOptions(),
-                textCapitalization: TextCapitalization.characters,
+                textCapitalization: TextCapitalization.none,
+                onChanged: (value) {
+                  identificacionValida = value.length >= 6;
+                },
+                digitsOnly: true,
               ),
               const SizedBox(
                 height: 18.0,
               ),
-              TextField(
+              TextFieldi(
+                focusNode: FocusNode(),
                 controller: _nombresController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Nombres del paciente',
-                  label: Text(
-                    'Nombres',
-                    style: TextStyle(color: Colors.green),
-                  ),
-                ),
+                hintText: 'Nombres del paciente',
+                count: 3,
+                field: 'Nombres',
                 textCapitalization: TextCapitalization.characters,
+                color: Colors.green,
+                keyboardType: TextInputType.text,
+                onChanged: (value) {
+                  nombresValido = value.length >= 3;
+                },
+                digitsOnly: false,
               ),
               const SizedBox(
                 height: 18.0,
               ),
-              TextField(
+              TextFieldi(
                 controller: _apellidosController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Apellidos del paciente',
-                  label: Text(
-                    'Apellidos',
-                    style: TextStyle(
-                      color: Colors.green,
-                    ),
-                  ),
-                ),
+                hintText: 'Apellidos del paciente',
+                field: 'Apellidos',
                 textCapitalization: TextCapitalization.characters,
+                count: 5,
+                color: Colors.green,
+                focusNode: FocusNode(),
+                keyboardType: TextInputType.text,
+                onChanged: (value) {
+                  apellidosValido = value.length >= 5;
+                },
+                digitsOnly: false,
               ),
               const SizedBox(
                 height: 18.0,
@@ -249,43 +255,46 @@ class _PacientesState extends State<Pacientes> {
                 ),
               ),
               const SizedBox(height: 18.0),
-              TextField(
+              TextFieldi(
+                hintText: 'telefono del paciente',
+                field: 'Teléfono',
                 controller: _telefonoController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'telefono del paciente',
-                  label: Text(
-                    'Teléfono',
-                    style: TextStyle(color: Colors.green),
-                  ),
-                ),
                 keyboardType: TextInputType.phone,
+                color: Colors.green,
+                count: 10,
+                focusNode: FocusNode(),
+                textCapitalization: TextCapitalization.none,
+                onChanged: (value) {
+                  telefonoValido = value.length >= 10;
+                },
+                digitsOnly: true,
               ),
               const SizedBox(height: 18.0),
-              TextField(
+              TextFieldi(
                 controller: _correoController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Correo del paciente',
-                  label: Text(
-                    'Correo',
-                    style: TextStyle(color: Colors.green),
-                  ),
-                ),
+                hintText: 'Correo del paciente',
+                field: 'Correo',
                 keyboardType: TextInputType.emailAddress,
+                color: Colors.green,
+                count: 8,
+                digitsOnly: false,
+                focusNode: FocusNode(),
+                onChanged: (value) {},
+                textCapitalization: TextCapitalization.none,
+                isCorreo: true,
               ),
               const SizedBox(height: 18),
-              TextField(
+              TextFieldi(
                 controller: _entidadController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Entidad del paciente',
-                  label: Text(
-                    'Entidad',
-                    style: TextStyle(color: Colors.green),
-                  ),
-                ),
-                keyboardType: TextInputType.emailAddress,
+                hintText: 'Entidad del paciente',
+                field: 'Entidad',
+                keyboardType: TextInputType.text,
+                color: Colors.green,
+                digitsOnly: false,
+                count: 0,
+                focusNode: FocusNode(),
+                textCapitalization: TextCapitalization.characters,
+                onChanged: (value) {},
               ),
               const SizedBox(
                 height: 36.0,
@@ -321,25 +330,70 @@ class _PacientesState extends State<Pacientes> {
   }
 
   void guardaPaciente() async {
-    if (_identificacionController.text == '') {
-      showToastB(
-        fToast,
-        'Ingrese la información correcta',
-        milliseconds: 50,
-        bacgroundColor: Colors.redAccent,
-      );
+    if (!identificacionValida) {
+      infoValido('Ingrese el número de identificacion correcto');
+      return;
+    } else if (!nombresValido) {
+      infoValido('Ingrese un nombre válido');
+      return;
+    } else if (!apellidosValido) {
+      infoValido('Ingrese apellidos más relevantes');
+      return;
+    } else if (!validarFecha()) {
+      infoValido('Ingrese una fecha de Nacimiento correcta');
+      return;
+    } else if (!telefonoValido) {
+      infoValido('Se necesita un numero de telefono correcto');
+      return;
+    } else if (!validarCorreo()) {
+      infoValido('Ingrese un correo correcto');
       return;
     }
     setState(() => guardando = !guardando);
     bool save = await guardarPaciente();
     if (save) {
-      await showToastB(fToast, 'Paciente Registrado Correctamente',
-          bacgroundColor: Colors.lightGreen);
+      await showToastB(
+        fToast,
+        'Paciente Registrado Correctamente',
+        bacgroundColor: Colors.lightGreen,
+      );
       Navigator.pop(context);
     } else {
       showToastB(
           fToast, 'Ha ocurido un error. Intentelo nuevamente más tarde.');
     }
     setState(() => guardando = !guardando);
+  }
+
+  void infoValido(String text) {
+    showToastB(
+      fToast,
+      text,
+      milliseconds: 50,
+      bacgroundColor: Colors.red,
+      frontColor: Colors.yellow,
+      icon: const Icon(Icons.dangerous, color: Colors.yellow),
+    );
+  }
+
+  bool validarFecha() {
+    if (_fecnacController.text != '') {
+      DateTime dateTime =
+          DateFormat("yyyy-MM-dd").parse(_fecnacController.text);
+      Duration difference = DateTime.now().difference(dateTime);
+      return difference.inDays > 10;
+    }
+    return false;
+  }
+
+  bool validarCorreo() {
+    String correo = _correoController.text;
+    if (correo == '') return false;
+    final RegExp emailRegExp = RegExp(
+      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+    return emailRegExp.hasMatch(_correoController.text);
   }
 }

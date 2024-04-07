@@ -5,14 +5,16 @@ class Toastmsg extends StatelessWidget {
   final String message; // Text to be displayed in the toast
   final FToast toast;
   final Color backgroundColor;
-  final Color frontColor; // Instance of FToast (passed from the parent widget)
+  final Color frontColor;
+  final Icon icon; // Instance of FToast (passed from the parent widget)
 
   const Toastmsg(
       {super.key,
       required this.message,
       required this.toast,
       required this.backgroundColor,
-      required this.frontColor});
+      required this.frontColor,
+      required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +27,15 @@ class Toastmsg extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.check),
+          icon,
           const SizedBox(width: 12.0),
           Text(
             message,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: frontColor,
+            ),
           ),
         ],
       ),

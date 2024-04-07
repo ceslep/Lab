@@ -22,3 +22,18 @@ Future<Paciente> getInfoPaciente(BuildContext context,
   } else {}
   return Paciente();
 }
+
+Future<List<Map<String, dynamic>>> getPacientes(
+  BuildContext context,
+) async {
+  final urlProvider = Provider.of<UrlProvider>(context, listen: false);
+  Uri url = Uri.parse('${urlProvider.url}getPacientes.php');
+
+  final response = await http.get(url);
+  if (response.statusCode == 200) {
+    var datosPaciente = json.decode(response.body);
+    return datosPaciente.cast<Map<String, dynamic>>();
+  } else {
+    return [];
+  }
+}

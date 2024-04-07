@@ -57,9 +57,11 @@ class _MainAppState extends State<MainApp> {
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: const [
           Locale('es'),
+          Locale('en'), // English
         ],
       ),
     );
