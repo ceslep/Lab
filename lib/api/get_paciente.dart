@@ -1,6 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lab/functions/show_toast.dart';
 import 'package:lab/models/paciente.dart';
 import 'package:lab/providers/url_provider.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +15,7 @@ Future<Paciente> getInfoPaciente(
 }) async {
   final urlProvider = Provider.of<UrlProvider>(context, listen: false);
   Uri url = Uri.parse('${urlProvider.url}getPaciente.php');
-  final bodyData = json.encode({
+  final String bodyData = json.encode({
     'identificacion': identificacion,
   });
   try {
@@ -30,17 +33,27 @@ Future<Paciente> getInfoPaciente(
   }
 }
 
-Future<List<Map<String, dynamic>>> getPacientes(
-  BuildContext context,
-) async {
+Future<List<Paciente>?> getPacientes(BuildContext context,
+    {String criterio = ''}) async {
   final urlProvider = Provider.of<UrlProvider>(context, listen: false);
-  Uri url = Uri.parse('${urlProvider.url}getPacientes.php');
+  final Uri url = Uri.parse('${urlProvider.url}getPacientes.php');
+  late final http.Response response;
+  final String bodyData = json.encode({"criterio": criterio});
+  try {
+    response = criterio == ''
+        ? await http.get(url)
+        : await http.post(url, body: bodyData);
+    if (response.statusCode == 200) {
+      List<dynamic> datosPaciente = json.decode(response.body);
+      List<Paciente> result =
+          datosPaciente.map((p) => Paciente.fromJson(p)).toList();
+      return result;
+    } else {
+      throw Exception('Error en la solicitud HTTP: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error al obtener el listado: $e');
 
-  final response = await http.get(url);
-  if (response.statusCode == 200) {
-    var datosPaciente = json.decode(response.body);
-    return datosPaciente.cast<Map<String, dynamic>>();
-  } else {
-    return [];
+    return null;
   }
 }

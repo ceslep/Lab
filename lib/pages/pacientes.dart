@@ -38,6 +38,7 @@ class _PacientesState extends State<Pacientes> {
   final TextEditingController _entidadController = TextEditingController();
 
   String _genero = '';
+  String id = '';
   String fecha = DateFormat('yyyy-MM-dd').format(DateTime.now());
   int identificaCount = 0;
   bool identificacionValida = false;
@@ -89,7 +90,9 @@ class _PacientesState extends State<Pacientes> {
         print(paciente.toJson());
         if (paciente.identificacion != null) {
           identificacionValida = _identificacionController.text.length >= 6;
+          id = '';
           if (paciente.identificacion != 'Error') {
+            id = paciente.id!;
             _nombresController.text = paciente.nombres!;
             _nombresfieldiCount = _nombresController.text.length;
             nombresValido = _nombresController.text.length >= 3;
@@ -393,7 +396,9 @@ class _PacientesState extends State<Pacientes> {
     if (save) {
       await showToastB(
         fToast,
-        'Paciente Registrado Correctamente',
+        id == ''
+            ? 'Paciente Registrado Correctamente'
+            : 'Paciente actualizado correctamente',
         bacgroundColor: Colors.lightGreen,
       );
       if (mounted) Navigator.pop(context);
