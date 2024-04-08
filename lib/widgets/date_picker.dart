@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lab/functions/select_date.dart';
 
-Widget buildDatePicker(BuildContext context, TextEditingController controller) {
+Widget buildDatePicker(
+    BuildContext context, TextEditingController controller, String label) {
   return Row(
     children: <Widget>[
       Expanded(
@@ -9,7 +10,7 @@ Widget buildDatePicker(BuildContext context, TextEditingController controller) {
           controller: controller,
           readOnly: true,
           decoration: InputDecoration(
-            labelText: 'Fecha de Nacimiento',
+            labelText: label,
             border: const OutlineInputBorder(),
             labelStyle: const TextStyle(color: Colors.green),
             suffixIcon: IconButton(

@@ -237,7 +237,8 @@ class _PacientesState extends State<Pacientes> {
               ),
               Padding(
                 padding: const EdgeInsets.all(0),
-                child: buildDatePicker(context, _fecnacController),
+                child: buildDatePicker(
+                    context, _fecnacController, 'Fecha de Nacimiento'),
               ),
               const SizedBox(
                 height: 18.0,
@@ -341,6 +342,9 @@ class _PacientesState extends State<Pacientes> {
       return;
     } else if (!validarFecha()) {
       infoValido('Ingrese una fecha de Nacimiento correcta');
+      return;
+    } else if (_genero.isEmpty) {
+      infoValido('Seleccione el género');
       return;
     } else if (!telefonoValido) {
       infoValido('Se necesita un numero de telefono correcto');

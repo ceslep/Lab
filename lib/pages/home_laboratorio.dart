@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lab/pages/lista_pacientes.dart';
-
 import '../widgets/home/home_fl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomeLaboratorio extends StatefulWidget {
   const HomeLaboratorio({super.key, required this.title});
@@ -34,7 +34,10 @@ class _HomeLaboratorioState extends State<HomeLaboratorio> {
                       builder: (context) => const ListaPacientes(),
                     ));
               },
-              icon: const Icon(Icons.group, color: Colors.white),
+              icon: Icon(
+                MdiIcons.listBox,
+                color: Colors.white,
+              ),
             ),
           ),
         ],

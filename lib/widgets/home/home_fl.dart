@@ -59,12 +59,28 @@ class BodyHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child:
-          Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-        Padding(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Padding(
             padding: const EdgeInsets.all(18.0),
-            child: buildDatePicker(context, _fechaController)),
-      ]),
+            child:
+                buildDatePicker(context, _fechaController, 'Fecha de Exámenes'),
+          ),
+          SizedBox(
+            height: 0.7 * MediaQuery.of(context).size.height,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset('images/logo.png'),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
