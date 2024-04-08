@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:lab/api/get_paciente.dart';
 import 'package:lab/models/paciente.dart';
@@ -62,7 +60,8 @@ class _ListaPacientesState extends State<ListaPacientes> {
               itemBuilder: (context, index) {
                 final String? identificacion = pacientes[index].identificacion;
                 final String? nombres = pacientes[index].nombres;
-                final String? apellidos = pacientes[index].apellidos;
+                final String? apellidos =
+                    pacientes[index].apellidos?.replaceAll('\ufffd', 'Ñ');
                 final String? fecnac = pacientes[index].fecnac;
                 final String? sexo = pacientes[index].genero;
                 final String? telefono = pacientes[index].telefono;
@@ -111,7 +110,8 @@ class _ListaPacientesState extends State<ListaPacientes> {
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Correo: $correo",
+                            correo != null ? "Correo: $correo" : "",
+                            style: const TextStyle(color: Colors.deepPurple),
                           ),
                         ],
                       ),

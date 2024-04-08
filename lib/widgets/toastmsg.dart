@@ -29,12 +29,14 @@ class Toastmsg extends StatelessWidget {
         children: [
           icon,
           const SizedBox(width: 12.0),
-          Text(
-            message,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: frontColor,
+          Expanded(
+            child: Text(
+              message,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: frontColor,
+              ),
             ),
           ),
         ],

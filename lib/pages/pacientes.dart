@@ -13,6 +13,7 @@ import 'package:lab/models/paciente.dart';
 import 'package:lab/providers/url_provider.dart';
 import 'package:lab/widgets/date_picker.dart';
 import 'package:lab/widgets/text_fieldi.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -44,6 +45,11 @@ class _PacientesState extends State<Pacientes> {
   bool apellidosValido = false;
   bool telefonoValido = false;
 
+  int _nombresfieldiCount = 0;
+  int _apellidosFieldiCount = 0;
+  int _telefonofieldiCount = 0;
+  int _correofieldiCount = 0;
+
   List<String> genero = [
     'Seleccione el genero del paciente',
     'Masculino',
@@ -68,6 +74,7 @@ class _PacientesState extends State<Pacientes> {
   }
 
   final focusNode = FocusNode();
+  final focusNodeNombres = FocusNode();
 
   @override
   void initState() {
@@ -78,16 +85,38 @@ class _PacientesState extends State<Pacientes> {
       if (!focusNode.hasFocus) {
         Paciente paciente = await getInfoPaciente(context,
             identificacion: _identificacionController.text);
+
         print(paciente.toJson());
         if (paciente.identificacion != null) {
-          _nombresController.text = paciente.nombres!;
-          _apellidosController.text = paciente.apellidos!;
-          _fecnacController.text = paciente.fecnac!;
-          _genero = paciente.genero!;
-          _telefonoController.text = paciente.telefono!;
-          _correoController.text = paciente.correo!;
-          _entidadController.text = paciente.entidad!;
-          setState(() {});
+          identificacionValida = _identificacionController.text.length >= 6;
+          if (paciente.identificacion != 'Error') {
+            _nombresController.text = paciente.nombres!;
+            _nombresfieldiCount = _nombresController.text.length;
+            nombresValido = _nombresController.text.length >= 3;
+            _apellidosController.text =
+                paciente.apellidos!.replaceAll('\ufffd', 'Ñ');
+            apellidosValido = _apellidosController.text.length >= 5;
+            _apellidosFieldiCount = _apellidosController.text.length;
+            _fecnacController.text = paciente.fecnac!;
+            _genero = paciente.genero!;
+            _telefonoController.text = paciente.telefono!;
+            telefonoValido = _telefonoController.text.length >= 10;
+            _telefonofieldiCount = _telefonoController.text.length;
+            _correoController.text = paciente.correo!;
+            _correofieldiCount = _correoController.text.length;
+            _entidadController.text = paciente.entidad!;
+            if (mounted) setState(() {});
+          } else {
+            showToastB(fToast,
+                'Sin Internet. Ha ocurrido un error obteniendo los datos del servidor',
+                bacgroundColor: Colors.red,
+                frontColor: Colors.yellow,
+                icon: Icon(
+                  MdiIcons.networkOff,
+                  color: Colors.yellow,
+                ),
+                milliseconds: 10);
+          }
         }
       }
     });
@@ -185,6 +214,7 @@ class _PacientesState extends State<Pacientes> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               TextFieldi(
+                autoFocus: true,
                 focusNode: focusNode,
                 controller: _identificacionController,
                 count: 6,
@@ -202,7 +232,8 @@ class _PacientesState extends State<Pacientes> {
                 height: 18.0,
               ),
               TextFieldi(
-                focusNode: FocusNode(),
+                fieldiCount: _nombresfieldiCount,
+                focusNode: focusNodeNombres,
                 controller: _nombresController,
                 hintText: 'Nombres del paciente',
                 count: 3,
@@ -219,6 +250,7 @@ class _PacientesState extends State<Pacientes> {
                 height: 18.0,
               ),
               TextFieldi(
+                fieldiCount: _apellidosFieldiCount,
                 controller: _apellidosController,
                 hintText: 'Apellidos del paciente',
                 field: 'Apellidos',
@@ -257,6 +289,7 @@ class _PacientesState extends State<Pacientes> {
               ),
               const SizedBox(height: 18.0),
               TextFieldi(
+                fieldiCount: _telefonofieldiCount,
                 hintText: 'telefono del paciente',
                 field: 'Teléfono',
                 controller: _telefonoController,
@@ -272,6 +305,7 @@ class _PacientesState extends State<Pacientes> {
               ),
               const SizedBox(height: 18.0),
               TextFieldi(
+                fieldiCount: _correofieldiCount,
                 controller: _correoController,
                 hintText: 'Correo del paciente',
                 field: 'Correo',
@@ -283,6 +317,7 @@ class _PacientesState extends State<Pacientes> {
                 onChanged: (value) {},
                 textCapitalization: TextCapitalization.none,
                 isCorreo: true,
+                correoValido: validarCorreo(),
               ),
               const SizedBox(height: 18),
               TextFieldi(
@@ -361,7 +396,7 @@ class _PacientesState extends State<Pacientes> {
         'Paciente Registrado Correctamente',
         bacgroundColor: Colors.lightGreen,
       );
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     } else {
       showToastB(
           fToast, 'Ha ocurido un error. Intentelo nuevamente más tarde.');

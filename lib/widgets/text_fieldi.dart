@@ -39,6 +39,7 @@ bool validarCorreo(String correo) {
   return emailRegExp.hasMatch(correo);
 }
 
+// ignore: must_be_immutable
 class TextFieldi extends StatefulWidget {
   final FocusNode focusNode;
   final TextEditingController controller;
@@ -51,7 +52,10 @@ class TextFieldi extends StatefulWidget {
   final TextInputType keyboardType;
   final bool digitsOnly;
   final bool isCorreo;
-  const TextFieldi({
+  final bool autoFocus;
+  int fieldiCount;
+  bool correoValido;
+  TextFieldi({
     super.key,
     required this.focusNode,
     required this.controller,
@@ -64,6 +68,9 @@ class TextFieldi extends StatefulWidget {
     required this.keyboardType,
     required this.digitsOnly,
     this.isCorreo = false,
+    this.autoFocus = false,
+    this.fieldiCount = 0,
+    this.correoValido = false,
   });
 
   @override
@@ -71,20 +78,25 @@ class TextFieldi extends StatefulWidget {
 }
 
 class _TextFieldiState extends State<TextFieldi> {
-  int fieldiCount = 0;
-  bool correoValido = false;
+// int fieldiCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextField(
       onChanged: (value) {
         if (widget.isCorreo) {
-          correoValido = validarCorreo(widget.controller.text);
+          widget.correoValido = validarCorreo(widget.controller.text);
         }
-        setState(() => fieldiCount = value.length);
+        setState(() => widget.fieldiCount = value.length);
         widget.onChanged(value);
       },
       focusNode: widget.focusNode,
-      autofocus: true,
+      autofocus: widget.autoFocus,
       controller: widget.controller,
       inputFormatters: [
         widget.digitsOnly
@@ -95,7 +107,7 @@ class _TextFieldiState extends State<TextFieldi> {
       ],
       decoration: InputDecoration(
         error: widget.isCorreo
-            ? !correoValido
+            ? !widget.correoValido
                 ? const Text(
                     'Correo  inválido',
                     style: TextStyle(color: Colors.red, fontSize: 10),
@@ -105,6 +117,13 @@ class _TextFieldiState extends State<TextFieldi> {
                     style: TextStyle(color: Colors.blue, fontSize: 10),
                   )
             : null,
+        errorBorder: !widget.correoValido
+            ? const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.red),
+              )
+            : const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue),
+              ),
         border: const OutlineInputBorder(),
         hintText: widget.hintText,
         label: Text(
@@ -113,10 +132,11 @@ class _TextFieldiState extends State<TextFieldi> {
         ),
         counter: Text(
           widget.count > 0
-              ? '${fieldiCount.toString()} de Mínimo  ${widget.count} Caracteres'
+              ? '${widget.fieldiCount.toString()} de Mínimo  ${widget.count} Caracteres'
               : '',
           style: TextStyle(
-              color: fieldiCount >= widget.count ? Colors.blue : Colors.red,
+              color:
+                  widget.fieldiCount >= widget.count ? Colors.blue : Colors.red,
               fontSize: 10),
         ),
       ),
