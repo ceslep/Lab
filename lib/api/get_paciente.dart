@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:lab/functions/show_toast.dart';
+import 'package:lab/models/examenes.dart';
 import 'package:lab/models/paciente.dart';
 import 'package:lab/providers/url_provider.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +54,31 @@ Future<List<Paciente>?> getPacientes(BuildContext context,
   } catch (e) {
     print('Error al obtener el listado: $e');
 
-    return null;
+    return [];
+  }
+}
+
+Future<List<Examenes>?> examenesPaciente(BuildContext context,
+    {String criterio = ''}) async {
+  final urlProvider = Provider.of<UrlProvider>(context, listen: false);
+  final Uri url = Uri.parse('${urlProvider.url}getExamenesPaciente.php');
+  late final http.Response response;
+  final String bodyData = json.encode({"criterio": criterio});
+  try {
+    response = criterio == ''
+        ? await http.get(url)
+        : await http.post(url, body: bodyData);
+    if (response.statusCode == 200) {
+      List<dynamic> datosPaciente = json.decode(response.body);
+      List<Examenes> result =
+          datosPaciente.map((p) => Examenes.fromJson(p)).toList();
+      return result;
+    } else {
+      throw Exception('Error en la solicitud HTTP: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error al obtener el listado: $e');
+
+    return [];
   }
 }

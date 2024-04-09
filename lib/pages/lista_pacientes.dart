@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:lab/api/get_paciente.dart';
 import 'package:lab/functions/show_toast.dart';
 import 'package:lab/models/paciente.dart';
+import 'package:lab/pages/consulta_examenes.dart';
 
 class ListaPacientes extends StatefulWidget {
   const ListaPacientes({super.key});
@@ -18,14 +19,15 @@ class _ListaPacientesState extends State<ListaPacientes> {
   List<Paciente> pacientes = [];
   FToast fToast = FToast();
   bool cargado = false;
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller =
+      TextEditingController(text: '24398910');
 
   @override
   void initState() {
     super.initState();
     fToast.init(context);
     //  pacientes = await getPacientes(context) as List<Paciente>;
-    getPacientes(context).then((value) {
+    getPacientes(context, criterio: _controller.text).then((value) {
       if (value != null) {
         pacientes = value;
       } else {
@@ -56,115 +58,111 @@ class _ListaPacientesState extends State<ListaPacientes> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('Lista de Pacientes'),
       ),
-      body: pacientes.isEmpty
-          ? const Center(
-              child: SizedBox(
-              width: 60,
-              height: 60,
-              child: CircularProgressIndicator(
-                strokeWidth: 4,
-              ),
-            ))
-          : ListView.builder(
-              itemCount: pacientes.length + 1,
-              itemBuilder: (context, index) {
-                late final String? identificacion;
-                late final String? nombres;
-                late final String? apellidos;
-                late final String? fecnac;
-                late final String? sexo;
-                late final String? telefono;
-                late final String? correo;
-                late int edad;
-                int iindex = index - 1;
-                if (index > 0) {
-                  identificacion = pacientes[iindex].identificacion;
-                  nombres = pacientes[iindex].nombres;
-                  apellidos =
-                      pacientes[iindex].apellidos?.replaceAll('\ufffd', 'Ñ');
-                  fecnac = pacientes[iindex].fecnac;
-                  sexo = pacientes[iindex].genero;
-                  telefono = pacientes[iindex].telefono;
-                  correo = pacientes[iindex].correo;
-                  edad = calcularEdad(fecnac!);
-                }
-                return index == 0
-                    ? SizedBox(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 18.0, right: 18),
-                          child: TextField(
-                            controller: _controller,
-                            autofocus: true,
-                            onChanged: buscarChanged,
-                            decoration: InputDecoration(
-                              labelText: 'Buscar...',
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  _controller.clear();
-                                  buscarChanged('');
-                                },
-                                icon: const Icon(Icons.clear),
+      body: ListView.builder(
+        itemCount: pacientes.length + 1,
+        itemBuilder: (context, index) {
+          late final String? identificacion;
+          late final String? nombres;
+          late final String? apellidos;
+          late final String? fecnac;
+          late final String? sexo;
+          late final String? telefono;
+          late final String? correo;
+          late int edad;
+          int iindex = index - 1;
+          if (index > 0) {
+            identificacion = pacientes[iindex].identificacion;
+            nombres = pacientes[iindex].nombres;
+            apellidos = pacientes[iindex].apellidos?.replaceAll('\ufffd', 'Ñ');
+            fecnac = pacientes[iindex].fecnac;
+            sexo = pacientes[iindex].genero;
+            telefono = pacientes[iindex].telefono;
+            correo = pacientes[iindex].correo;
+            edad = calcularEdad(fecnac!);
+          }
+          return index == 0
+              ? SizedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 18.0, right: 18),
+                    child: TextField(
+                      controller: _controller,
+                      autofocus: true,
+                      onChanged: buscarChanged,
+                      decoration: InputDecoration(
+                        labelText: 'Buscar...',
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            _controller.clear();
+                            buscarChanged('');
+                          },
+                          icon: const Icon(Icons.clear),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(left: 18.0, right: 18),
+                  child: Card(
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        child: Icon(
+                            sexo == 'Masculino' ? Icons.male : Icons.female),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ConsultaExamenes(
+                                  paciente: identificacion!,
+                                  nombres: '$nombres $apellidos',
+                                ),
+                              ));
+                        },
+                        icon: const Icon(Icons.medical_information,
+                            color: Colors.blueAccent),
+                      ),
+                      title: Text(
+                        "${apellidos!} ${nombres!}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.green),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Identificación: $identificacion"),
+                          Text("Fecha de Nacimiento: $fecnac"),
+                          Row(
+                            children: [
+                              Text(
+                                "Edad: $edad.",
                               ),
-                            ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                "Sexo: $sexo",
+                              ),
+                            ],
                           ),
-                        ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 18.0, right: 18),
-                        child: Card(
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              child: Icon(sexo == 'Masculino'
-                                  ? Icons.male
-                                  : Icons.female),
-                            ),
-                            trailing: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.medical_information,
-                                  color: Colors.blueAccent),
-                            ),
-                            title: Text(
-                              "${apellidos!} ${nombres!}",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green),
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Identificación: $identificacion"),
-                                Text("Fecha de Nacimiento: $fecnac"),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Edad: $edad.",
-                                    ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      "Sexo: $sexo",
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  "Telefono: $telefono",
-                                  style: const TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  correo != null ? "Correo: $correo" : "",
-                                  style:
-                                      const TextStyle(color: Colors.deepPurple),
-                                ),
-                              ],
-                            ),
+                          Text(
+                            "Telefono: $telefono",
+                            style: const TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold),
                           ),
-                        ),
-                      );
-              },
-            ),
+                          Text(
+                            correo != null ? "Correo: $correo" : "",
+                            style: const TextStyle(color: Colors.deepPurple),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+        },
+      ),
     );
   }
 
@@ -177,9 +175,11 @@ class _ListaPacientesState extends State<ListaPacientes> {
       }
       setState(() {});
     } else {
+      setState(() => cargado = !cargado);
       //  setState(() => pacientes = []);
       pacientes =
           await getPacientes(context, criterio: value) as List<Paciente>;
+      print(pacientes);
       setState(() => cargado = !cargado);
     }
   }

@@ -1,4 +1,4 @@
-package com.celesoft.lab
+package com.example.lab
 
 import io.flutter.embedding.android.FlutterActivity
 
