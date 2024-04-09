@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:lab/models/examenes.dart';
+import 'package:lab/models/hemograma_rayto.dart';
 import 'package:lab/models/paciente.dart';
 import 'package:lab/providers/url_provider.dart';
 import 'package:provider/provider.dart';
@@ -80,5 +81,29 @@ Future<List<Examenes>?> examenesPaciente(BuildContext context,
     print('Error al obtener el listado: $e');
 
     return [];
+  }
+}
+
+Future<HemogramaRayto> getHemogramaRayto(
+  BuildContext context, {
+  String ind = '',
+}) async {
+  final urlProvider = Provider.of<UrlProvider>(context, listen: false);
+  Uri url = Uri.parse('${urlProvider.url}getHemogramaRayto.php');
+  final String bodyData = json.encode({
+    'ind': ind,
+  });
+  try {
+    final response = await http.post(url, body: bodyData);
+    if (response.statusCode == 200) {
+      final decodedResponse = utf8.decode(response.bodyBytes);
+      final dynamic datosHemograma = json.decode(decodedResponse);
+      if (datosHemograma['msg']) {
+        return HemogramaRayto.fromJson(datosHemograma['data']);
+      }
+    } else {}
+    return HemogramaRayto();
+  } catch (e) {
+    return HemogramaRayto(identificacion: 'Error');
   }
 }

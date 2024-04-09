@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:lab/api/get_paciente.dart';
+import 'package:lab/api/get_info_pacientes.dart';
 import 'package:lab/functions/show_toast.dart';
 import 'package:lab/models/paciente.dart';
 import 'package:lab/pages/consulta_examenes.dart';
@@ -32,7 +32,7 @@ class _ListaPacientesState extends State<ListaPacientes> {
         pacientes = value;
         if (pacientes.isEmpty) {
           showToastB(fToast,
-              'No se ha podido obtener la información, Compruene su cinexión');
+              'No se ha podido obtener la información, Compruebe su cinexión');
         }
       } else {
         showToastB(fToast, 'Error en el sevidor');

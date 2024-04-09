@@ -1,8 +1,7 @@
 // ignore_for_file: avoid_print
 
-
 import 'package:flutter/material.dart';
-import 'package:lab/api/get_paciente.dart';
+import 'package:lab/api/get_info_pacientes.dart';
 import 'package:lab/models/paciente.dart';
 
 class CrearExamen extends StatefulWidget {

@@ -7,7 +7,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:lab/api/get_paciente.dart';
+import 'package:lab/api/get_info_pacientes.dart';
 import 'package:lab/functions/show_toast.dart';
 import 'package:lab/models/paciente.dart';
 import 'package:lab/providers/url_provider.dart';
@@ -110,15 +110,17 @@ class _PacientesState extends State<Pacientes> {
             _entidadController.text = paciente.entidad!;
             if (mounted) setState(() {});
           } else {
-            showToastB(fToast,
-                'Sin Internet. Ha ocurrido un error obteniendo los datos del servidor',
-                bacgroundColor: Colors.red,
-                frontColor: Colors.yellow,
-                icon: Icon(
-                  MdiIcons.networkOff,
-                  color: Colors.yellow,
-                ),
-                milliseconds: 10);
+            showToastB(
+              fToast,
+              'Sin Internet. Ha ocurrido un error obteniendo los datos del servidor',
+              bacgroundColor: Colors.red,
+              frontColor: Colors.yellow,
+              icon: Icon(
+                MdiIcons.networkOff,
+                color: Colors.yellow,
+              ),
+              milliseconds: 10,
+            );
           }
         }
       }

@@ -2,9 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:lab/api/get_paciente.dart';
+import 'package:lab/api/get_info_pacientes.dart';
 import 'package:lab/functions/show_toast.dart';
 import 'package:lab/models/examenes.dart';
+import 'package:lab/models/hemograma_rayto.dart';
+import 'package:lab/pages/view_examenes/hemograma_rayto.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ConsultaExamenes extends StatefulWidget {
   final String paciente;
@@ -38,18 +41,24 @@ class _ConsultaExamenesState extends State<ConsultaExamenes> {
         print(listafechas);
         listaFechas.addAll(listafechas);
         listaFechas = ['Fecha del o de los examenes', 'Todos'] + listaFechas;
-        _fechas = listaFechas
-            .map((e) => DropdownMenuItem(
-                  value: e.contains('Fecha') ? '' : e,
-                  enabled: e != '',
-                  child: Text(
-                    e,
-                    style: TextStyle(
-                        color:
-                            e.contains('Fecha') ? Colors.grey : Colors.green),
-                  ),
-                ))
-            .toList();
+        int idx = 0;
+        _fechas = listaFechas.map((e) {
+          idx++;
+          return DropdownMenuItem(
+            value: e.contains('Fecha') ? '' : e,
+            enabled: e != '',
+            child: Text(
+              e,
+              style: TextStyle(
+                color: e.contains('Fecha') || e.contains('Todos')
+                    ? Colors.grey
+                    : idx % 2 == 0
+                        ? Colors.green
+                        : Colors.amber,
+              ),
+            ),
+          );
+        }).toList();
       } else {
         showToastB(fToast, 'Error en el sevidor');
       }
@@ -67,7 +76,7 @@ class _ConsultaExamenesState extends State<ConsultaExamenes> {
         examen.toLowerCase().contains('lipi'))
     // ignore: curly_braces_in_flow_control_structures
     {
-      result = 'images/colesterol.png';
+      result = 'images/hdl.png';
     } else {
       result = 'images/lab.png';
     }
@@ -89,7 +98,9 @@ class _ConsultaExamenesState extends State<ConsultaExamenes> {
           : ListView.builder(
               itemCount: examenesFilter.length + 1,
               itemBuilder: (context, index) {
+                late String ind;
                 late String examen;
+                late String codexamen;
                 late String fecha;
                 late String bacteriologo;
                 late String doctor;
@@ -115,7 +126,9 @@ class _ConsultaExamenesState extends State<ConsultaExamenes> {
                     ),
                   );
                 } else {
+                  ind = examenes[indexx].ind;
                   examen = examenes[indexx].examen;
+                  codexamen = examenes[indexx].codexamen;
                   fecha = examenes[indexx].fecha;
                   bacteriologo = examenes[indexx].bacteriologo;
                   doctor = examenes[indexx].doctor;
@@ -129,7 +142,9 @@ class _ConsultaExamenesState extends State<ConsultaExamenes> {
                         backgroundImage: AssetImage(imageLab(examen)),
                       ),
                       trailing: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          viewExam(context, codexamen, ind);
+                        },
                         icon: const Icon(
                           Icons.remove_red_eye,
                           color: Colors.blue,
@@ -167,5 +182,33 @@ class _ConsultaExamenesState extends State<ConsultaExamenes> {
               },
             ),
     );
+  }
+
+  void viewExam(BuildContext context, String codigo, String ind) {
+    if (codigo == '3000' || codigo == '3001') {
+      getHemogramaRayto(context, ind: ind).then((value) {
+        HemogramaRayto hemograma = value;
+        if (hemograma.identificacion != '') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ViewHemogramaRayto(hemograma: hemograma),
+            ),
+          );
+        } else {
+          showToastB(
+            fToast,
+            'Sin Internet. Ha ocurrido un error obteniendo los datos del servidor',
+            bacgroundColor: Colors.red,
+            frontColor: Colors.yellow,
+            icon: Icon(
+              MdiIcons.networkOff,
+              color: Colors.yellow,
+            ),
+            milliseconds: 10,
+          );
+        }
+      });
+    }
   }
 }
