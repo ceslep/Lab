@@ -20,7 +20,7 @@ class _ListaPacientesState extends State<ListaPacientes> {
   FToast fToast = FToast();
   bool cargado = false;
   final TextEditingController _controller =
-      TextEditingController(text: '24398910');
+      TextEditingController(text: '9695141');
 
   @override
   void initState() {
@@ -30,6 +30,10 @@ class _ListaPacientesState extends State<ListaPacientes> {
     getPacientes(context, criterio: _controller.text).then((value) {
       if (value != null) {
         pacientes = value;
+        if (pacientes.isEmpty) {
+          showToastB(fToast,
+              'No se ha podido obtener la información, Compruene su cinexión');
+        }
       } else {
         showToastB(fToast, 'Error en el sevidor');
       }

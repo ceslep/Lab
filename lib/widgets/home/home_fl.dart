@@ -74,7 +74,12 @@ class BodyHome extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset('images/logo.png'),
+                  Expanded(
+                    child: Image.asset(
+                      'images/logo.png',
+                      scale: 0.5,
+                    ),
+                  ),
                 ],
               ),
             ),
