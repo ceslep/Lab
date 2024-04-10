@@ -102,7 +102,7 @@ Future<HemogramaRayto> getHemogramaRayto(
         return HemogramaRayto.fromJson(datosHemograma['data']);
       }
     } else {}
-    return HemogramaRayto();
+    return HemogramaRayto(identificacion: 'Error');
   } catch (e) {
     return HemogramaRayto(identificacion: 'Error');
   }

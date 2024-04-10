@@ -20,6 +20,35 @@ class ConsultaExamenes extends StatefulWidget {
   State<ConsultaExamenes> createState() => _ConsultaExamenesState();
 }
 
+String formatDate(String dateString) {
+  final dateTime = DateTime.parse(dateString);
+  final List<String> weekdays = [
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
+    'Sábado',
+    'Domingo'
+  ];
+  final monthNames = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'
+  ];
+
+  return '${weekdays[dateTime.weekday - 1]} ${dateTime.day} de ${monthNames[dateTime.month - 1]} de ${dateTime.year}';
+}
+
 class _ConsultaExamenesState extends State<ConsultaExamenes> {
   List<Examenes> examenes = [];
   List<Examenes> examenesFilter = [];
@@ -47,15 +76,25 @@ class _ConsultaExamenesState extends State<ConsultaExamenes> {
           return DropdownMenuItem(
             value: e.contains('Fecha') ? '' : e,
             enabled: e != '',
-            child: Text(
-              e,
-              style: TextStyle(
-                color: e.contains('Fecha') || e.contains('Todos')
-                    ? Colors.grey
-                    : idx % 2 == 0
-                        ? Colors.green
-                        : Colors.amber,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  e,
+                  style: TextStyle(
+                    color: e.contains('Fecha') || e.contains('Todos')
+                        ? Colors.grey
+                        : idx % 2 == 0
+                            ? Colors.green
+                            : Colors.amber,
+                  ),
+                ),
+                Text(
+                  e.contains('-') ? formatDate(e) : '',
+                  style: const TextStyle(
+                      fontSize: 10, fontStyle: FontStyle.italic),
+                ),
+              ],
             ),
           );
         }).toList();
@@ -126,12 +165,12 @@ class _ConsultaExamenesState extends State<ConsultaExamenes> {
                     ),
                   );
                 } else {
-                  ind = examenes[indexx].ind;
-                  examen = examenes[indexx].examen;
-                  codexamen = examenes[indexx].codexamen;
-                  fecha = examenes[indexx].fecha;
-                  bacteriologo = examenes[indexx].bacteriologo;
-                  doctor = examenes[indexx].doctor;
+                  ind = examenesFilter[indexx].ind;
+                  examen = examenesFilter[indexx].examen;
+                  codexamen = examenesFilter[indexx].codexamen;
+                  fecha = examenesFilter[indexx].fecha;
+                  bacteriologo = examenesFilter[indexx].bacteriologo;
+                  doctor = examenesFilter[indexx].doctor;
                 }
                 return Padding(
                   padding: const EdgeInsets.only(left: 8.0, right: 8),
