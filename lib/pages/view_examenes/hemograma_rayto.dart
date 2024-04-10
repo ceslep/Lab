@@ -35,8 +35,16 @@ List<Map<String, dynamic>> parseText(String text) {
 }
 
 class _ViewHemogramaRaytoState extends State<ViewHemogramaRayto> {
+  void onFormHemogramaChange(formState) {
+    // Accede a las propiedades del estado de FormHemograma
+    print(formState.fsistematizado);
+
+    // Realiza acciones en base al estado del formulario
+  }
+
   FToast fToast = FToast();
   List<Map<String, dynamic>> dataHemograma = List.empty();
+  String sistematizado = '';
   @override
   void initState() {
     super.initState();
@@ -73,9 +81,22 @@ class _ViewHemogramaRaytoState extends State<ViewHemogramaRayto> {
             color: Colors.white,
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.save,
+                color: Colors.lightGreenAccent,
+              ),
+            ),
+          ),
+        ],
       ),
       body: FormHemograma(
         hemograma: dataHemograma,
+        onFormStateChange: onFormHemogramaChange,
       ),
     );
   }

@@ -31,11 +31,28 @@ class _ListaPacientesState extends State<ListaPacientes> {
       if (value != null) {
         pacientes = value;
         if (pacientes.isEmpty) {
-          showToastB(fToast,
-              'No se ha podido obtener la información, Compruebe su cinexión');
+          showToastB(
+            fToast,
+            'No se ha podido obtener la información, Compruebe su conexión',
+            bacgroundColor: Colors.red,
+            frontColor: Colors.yellow,
+            icon: const Icon(
+              Icons.dangerous_outlined,
+              color: Colors.lightGreenAccent,
+            ),
+          );
         }
       } else {
-        showToastB(fToast, 'Error en el sevidor');
+        showToastB(
+          fToast,
+          'Error en el sevidor',
+          bacgroundColor: Colors.red,
+          frontColor: Colors.yellow,
+          icon: const Icon(
+            Icons.dangerous_outlined,
+            color: Colors.lightGreenAccent,
+          ),
+        );
       }
       setState(() {});
     });
@@ -175,7 +192,9 @@ class _ListaPacientesState extends State<ListaPacientes> {
       if (value.isEmpty) {
         setState(() => cargado = !cargado);
         pacientes = await getPacientes(context) as List<Paciente>;
-        setState(() => cargado = !cargado);
+        if (mounted) {
+          setState(() => cargado = !cargado);
+        }
       }
       setState(() {});
     } else {

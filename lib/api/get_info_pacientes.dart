@@ -107,3 +107,11 @@ Future<HemogramaRayto> getHemogramaRayto(
     return HemogramaRayto(identificacion: 'Error');
   }
 }
+
+Future<void> gurdarHemograma(
+    BuildContext context, HemogramaRayto hemograma) async {
+  final urlProvider = Provider.of<UrlProvider>(context, listen: false);
+  final Uri url = Uri.parse('${urlProvider.url}getExamenesPaciente.php');
+  late final http.Response response;
+  final String bodyData = json.encode(hemograma.toJson());
+}

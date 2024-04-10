@@ -1,10 +1,17 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 
+abstract class HemogramaState {
+  String getTextFieldValue(TextEditingController controller);
+}
+
 class FormHemograma extends StatefulWidget {
+  final void Function(_FormHemogramaState) onFormStateChange;
   final List<Map<String, dynamic>> hemograma;
-  const FormHemograma({super.key, required this.hemograma});
+
+  const FormHemograma(
+      {super.key, required this.hemograma, required this.onFormStateChange});
 
   @override
   State<FormHemograma> createState() => _FormHemogramaState();
@@ -12,58 +19,63 @@ class FormHemograma extends StatefulWidget {
 
 class _FormHemogramaState extends State<FormHemograma> {
   final _formKey = GlobalKey<FormState>();
+  String fsistematizado = '';
+  TextEditingController wbcController = TextEditingController();
+  TextEditingController lymNumberController = TextEditingController();
+  TextEditingController midNumberController = TextEditingController();
+  TextEditingController graNumberController = TextEditingController();
+  TextEditingController lymPercentController = TextEditingController();
+  TextEditingController midPercentController = TextEditingController();
+  TextEditingController graPercentController = TextEditingController();
+  TextEditingController rbcController = TextEditingController();
+  TextEditingController hgbController = TextEditingController();
+  TextEditingController mchcController = TextEditingController();
+  TextEditingController mchController = TextEditingController();
+  TextEditingController mcvController = TextEditingController();
+  TextEditingController rdwCvController = TextEditingController();
+  TextEditingController rdwSdController = TextEditingController();
+  TextEditingController hctController = TextEditingController();
+  TextEditingController pltController = TextEditingController();
+  TextEditingController mpvController = TextEditingController();
+  TextEditingController pdwController = TextEditingController();
+  TextEditingController pctController = TextEditingController();
+  TextEditingController pLcrController = TextEditingController();
 
-  final TextEditingController _wbcController = TextEditingController();
-  final TextEditingController _lymNumberController = TextEditingController();
-  final TextEditingController _midNumberController = TextEditingController();
-  final TextEditingController _graNumberController = TextEditingController();
-  final TextEditingController _lymPercentController = TextEditingController();
-  final TextEditingController _midPercentController = TextEditingController();
-  final TextEditingController _graPercentController = TextEditingController();
-  final TextEditingController _rbcController = TextEditingController();
-  final TextEditingController _hgbController = TextEditingController();
-  final TextEditingController _mchcController = TextEditingController();
-  final TextEditingController _mchController = TextEditingController();
-  final TextEditingController _mcvController = TextEditingController();
-  final TextEditingController _rdwCvController = TextEditingController();
-  final TextEditingController _rdwSdController = TextEditingController();
-  final TextEditingController _hctController = TextEditingController();
-  final TextEditingController _pltController = TextEditingController();
-  final TextEditingController _mpvController = TextEditingController();
-  final TextEditingController _pdwController = TextEditingController();
-  final TextEditingController _pctController = TextEditingController();
-  final TextEditingController _pLcrController = TextEditingController();
+  String getTextFieldValue(TextEditingController controller) {
+    return controller.text;
+  }
 
   @override
   void initState() {
     super.initState();
     if (widget.hemograma.isNotEmpty) {
-      _wbcController.text = widget.hemograma[0]['WBC'].toString();
-      _lymNumberController.text = widget.hemograma[1]['LYM#'].toString();
-      _midNumberController.text = widget.hemograma[2]['MID#'].toString();
-      _graNumberController.text = widget.hemograma[3]['GRA#'].toString();
-      _lymPercentController.text = widget.hemograma[4]['LYM%'].toString();
-      _midPercentController.text = widget.hemograma[5]['MID%'].toString();
-      _graPercentController.text = widget.hemograma[6]['GRA%'].toString();
-      _rbcController.text = widget.hemograma[7]['RBC'].toString();
-      _hgbController.text = widget.hemograma[8]['HGB'].toString();
-      _mchcController.text = widget.hemograma[9]['MCHC'].toString();
-      _mchController.text = widget.hemograma[10]['MCH'].toString();
-      _mcvController.text = widget.hemograma[11]['MCV'].toString();
-      _rdwCvController.text = widget.hemograma[12]['RDW-CV'].toString();
-      _rdwSdController.text = widget.hemograma[13]['RDW-SD'].toString();
-      _hctController.text = widget.hemograma[14]['HCT'].toString();
-      _pltController.text = widget.hemograma[15]['PLT'].toString();
-      _mpvController.text = widget.hemograma[16]['MPV'].toString();
-      _pdwController.text = widget.hemograma[17]['PDW'].toString();
-      _pctController.text = widget.hemograma[18]['PCT'].toString();
-      _pLcrController.text = widget.hemograma[19]['P-LCR'].toString();
+      wbcController.text = widget.hemograma[0]['WBC'].toString();
+      lymNumberController.text = widget.hemograma[1]['LYM#'].toString();
+      midNumberController.text = widget.hemograma[2]['MID#'].toString();
+      graNumberController.text = widget.hemograma[3]['GRA#'].toString();
+      lymPercentController.text = widget.hemograma[4]['LYM%'].toString();
+      midPercentController.text = widget.hemograma[5]['MID%'].toString();
+      graPercentController.text = widget.hemograma[6]['GRA%'].toString();
+      rbcController.text = widget.hemograma[7]['RBC'].toString();
+      hgbController.text = widget.hemograma[8]['HGB'].toString();
+      mchcController.text = widget.hemograma[9]['MCHC'].toString();
+      mchController.text = widget.hemograma[10]['MCH'].toString();
+      mcvController.text = widget.hemograma[11]['MCV'].toString();
+      rdwCvController.text = widget.hemograma[12]['RDW-CV'].toString();
+      rdwSdController.text = widget.hemograma[13]['RDW-SD'].toString();
+      hctController.text = widget.hemograma[14]['HCT'].toString();
+      pltController.text = widget.hemograma[15]['PLT'].toString();
+      mpvController.text = widget.hemograma[16]['MPV'].toString();
+      pdwController.text = widget.hemograma[17]['PDW'].toString();
+      pctController.text = widget.hemograma[18]['PCT'].toString();
+      pLcrController.text = widget.hemograma[19]['P-LCR'].toString();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      onChanged: () {},
       key: _formKey,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -71,83 +83,83 @@ class _FormHemogramaState extends State<FormHemograma> {
           children: [
             _buildTextField(
               'WBC',
-              _wbcController,
+              wbcController,
             ),
             _buildTextField(
               'LYM#',
-              _lymNumberController,
+              lymNumberController,
             ),
             _buildTextField(
               'MID#',
-              _midNumberController,
+              midNumberController,
             ),
             _buildTextField(
               'GRA#',
-              _graNumberController,
+              graNumberController,
             ),
             _buildTextField(
               'LYM%',
-              _lymPercentController,
+              lymPercentController,
             ),
             _buildTextField(
               'MID%',
-              _midPercentController,
+              midPercentController,
             ),
             _buildTextField(
               'GRA%',
-              _graPercentController,
+              graPercentController,
             ),
             _buildTextField(
               'RBC',
-              _rbcController,
+              rbcController,
             ),
             _buildTextField(
               'HGB',
-              _hgbController,
+              hgbController,
             ),
             _buildTextField(
               'MCHC',
-              _mchcController,
+              mchcController,
             ),
             _buildTextField(
               'MCH',
-              _mchController,
+              mchController,
             ),
             _buildTextField(
               'MCV',
-              _mcvController,
+              mcvController,
             ),
             _buildTextField(
               'RDW-CV',
-              _rdwCvController,
+              rdwCvController,
             ),
             _buildTextField(
               'RDW-SD',
-              _rdwSdController,
+              rdwSdController,
             ),
             _buildTextField(
               'HCT',
-              _hctController,
+              hctController,
             ),
             _buildTextField(
               'PLT',
-              _pltController,
+              pltController,
             ),
             _buildTextField(
               'MPV',
-              _mpvController,
+              mpvController,
             ),
             _buildTextField(
               'PDW',
-              _pdwController,
+              pdwController,
             ),
             _buildTextField(
               'PCT',
-              _pctController,
+              pctController,
             ),
             _buildTextField(
               'P-LCR',
-              _pLcrController,
+              pLcrController,
             ),
           ],
         ),
@@ -157,6 +169,11 @@ class _FormHemogramaState extends State<FormHemograma> {
 
   Widget _buildTextField(String labelText, TextEditingController controller) {
     return TextFormField(
+      onChanged: (value) {
+        setState(() {
+          widget.onFormStateChange(this);
+        });
+      },
       textAlign: TextAlign.end,
       controller: controller,
       decoration: InputDecoration(
