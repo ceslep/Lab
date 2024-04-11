@@ -18,7 +18,8 @@ class FormHemograma extends StatefulWidget {
 }
 
 class _FormHemogramaState extends State<FormHemograma> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  List<Widget> formFields = [];
   String fsistematizado = '';
   TextEditingController wbcController = TextEditingController();
   TextEditingController lymNumberController = TextEditingController();
@@ -70,98 +71,105 @@ class _FormHemogramaState extends State<FormHemograma> {
       pctController.text = widget.hemograma[18]['PCT'].toString();
       pLcrController.text = widget.hemograma[19]['P-LCR'].toString();
     }
+    formFields = [
+      _buildTextField(
+        'WBC',
+        wbcController,
+      ),
+      _buildTextField(
+        'LYM#',
+        lymNumberController,
+      ),
+      _buildTextField(
+        'MID#',
+        midNumberController,
+      ),
+      _buildTextField(
+        'GRA#',
+        graNumberController,
+      ),
+      _buildTextField(
+        'LYM%',
+        lymPercentController,
+      ),
+      _buildTextField(
+        'MID%',
+        midPercentController,
+      ),
+      _buildTextField(
+        'GRA%',
+        graPercentController,
+      ),
+      _buildTextField(
+        'RBC',
+        rbcController,
+      ),
+      _buildTextField(
+        'HGB',
+        hgbController,
+      ),
+      _buildTextField(
+        'MCHC',
+        mchcController,
+      ),
+      _buildTextField(
+        'MCH',
+        mchController,
+      ),
+      _buildTextField(
+        'MCV',
+        mcvController,
+      ),
+      _buildTextField(
+        'RDW-CV',
+        rdwCvController,
+      ),
+      _buildTextField(
+        'RDW-SD',
+        rdwSdController,
+      ),
+      _buildTextField(
+        'HCT',
+        hctController,
+      ),
+      _buildTextField(
+        'PLT',
+        pltController,
+      ),
+      _buildTextField(
+        'MPV',
+        mpvController,
+      ),
+      _buildTextField(
+        'PDW',
+        pdwController,
+      ),
+      _buildTextField(
+        'PCT',
+        pctController,
+      ),
+      _buildTextField(
+        'P-LCR',
+        pLcrController,
+      ),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      onChanged: () {},
+      onChanged: () {
+        print("forms");
+        for (Widget field in formFields) {
+          final textFormField = (field as TextFormField);
+          print(textFormField.controller!.text);
+        }
+      },
       key: _formKey,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: [
-            _buildTextField(
-              'WBC',
-              wbcController,
-            ),
-            _buildTextField(
-              'LYM#',
-              lymNumberController,
-            ),
-            _buildTextField(
-              'MID#',
-              midNumberController,
-            ),
-            _buildTextField(
-              'GRA#',
-              graNumberController,
-            ),
-            _buildTextField(
-              'LYM%',
-              lymPercentController,
-            ),
-            _buildTextField(
-              'MID%',
-              midPercentController,
-            ),
-            _buildTextField(
-              'GRA%',
-              graPercentController,
-            ),
-            _buildTextField(
-              'RBC',
-              rbcController,
-            ),
-            _buildTextField(
-              'HGB',
-              hgbController,
-            ),
-            _buildTextField(
-              'MCHC',
-              mchcController,
-            ),
-            _buildTextField(
-              'MCH',
-              mchController,
-            ),
-            _buildTextField(
-              'MCV',
-              mcvController,
-            ),
-            _buildTextField(
-              'RDW-CV',
-              rdwCvController,
-            ),
-            _buildTextField(
-              'RDW-SD',
-              rdwSdController,
-            ),
-            _buildTextField(
-              'HCT',
-              hctController,
-            ),
-            _buildTextField(
-              'PLT',
-              pltController,
-            ),
-            _buildTextField(
-              'MPV',
-              mpvController,
-            ),
-            _buildTextField(
-              'PDW',
-              pdwController,
-            ),
-            _buildTextField(
-              'PCT',
-              pctController,
-            ),
-            _buildTextField(
-              'P-LCR',
-              pLcrController,
-            ),
-          ],
+          children: formFields,
         ),
       ),
     );
