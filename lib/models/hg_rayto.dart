@@ -56,6 +56,33 @@ class HRayto {
       this.pLCR,
       this.fechahora});
 
+  List<dynamic> get publicProperties => [
+        id,
+        identificacion,
+        fecha,
+        wBC,
+        lYMn,
+        mIDn,
+        gRAn,
+        lYMp,
+        mIDp,
+        gRAp,
+        rBC,
+        hGB,
+        mCHC,
+        mCH,
+        mCV,
+        rDWCV,
+        rDWSD,
+        hCT,
+        pLT,
+        mPV,
+        pDW,
+        pCT,
+        pLCR,
+        fechahora
+      ];
+
   factory HRayto.fromJson(Map<String, dynamic> json) => HRayto(
         id: json['id'].toString(),
         identificacion: json['identificacion'].toString(),

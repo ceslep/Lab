@@ -5,6 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lab/functions/show_toast.dart';
 import 'package:lab/models/hemograma_rayto.dart';
 import 'package:lab/pages/view_examenes/form/form_hemograma.dart';
+import 'package:lab/providers/hrayto_provider.dart';
+import 'package:provider/provider.dart';
 
 class ViewHemogramaRayto extends StatefulWidget {
   final HemogramaRayto hemograma;
@@ -35,20 +37,16 @@ List<Map<String, dynamic>> parseText(String text) {
 }
 
 class _ViewHemogramaRaytoState extends State<ViewHemogramaRayto> {
-  void onFormHemogramaChange(formState) {
-    // Accede a las propiedades del estado de FormHemograma
-    print(formState.fsistematizado);
-
-    // Realiza acciones en base al estado del formulario
-  }
+  void onFormHemogramaChange(FormHemograma formState) {}
 
   FToast fToast = FToast();
   List<Map<String, dynamic>> dataHemograma = List.empty();
   String sistematizado = '';
+  late HRaytoProvider hraytoProvider;
   @override
   void initState() {
     super.initState();
-
+    hraytoProvider = Provider.of<HRaytoProvider>(context, listen: false);
     fToast.init(context);
     try {
       String resultadoExamen = widget.hemograma.sistematizado!;
@@ -85,7 +83,11 @@ class _ViewHemogramaRaytoState extends State<ViewHemogramaRayto> {
           Padding(
             padding: const EdgeInsets.all(8),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                for (var property in hraytoProvider.hrayto.publicProperties) {
+                  print('Property: $property');
+                }
+              },
               icon: const Icon(
                 Icons.save,
                 color: Colors.lightGreenAccent,
@@ -96,7 +98,6 @@ class _ViewHemogramaRaytoState extends State<ViewHemogramaRayto> {
       ),
       body: FormHemograma(
         hemograma: dataHemograma,
-        onFormStateChange: onFormHemogramaChange,
       ),
     );
   }

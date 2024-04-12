@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:lab/pages/home_laboratorio.dart';
+import 'package:lab/providers/hrayto_provider.dart';
 import 'package:lab/providers/url_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:desktop_window/desktop_window.dart';
@@ -18,6 +19,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UrlProvider()),
+        ChangeNotifierProvider(create: (context) => HRaytoProvider()),
 
         // Agrega más providers si es necesario
       ],

@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lab/models/examenes.dart';
 import 'package:lab/models/hemograma_rayto.dart';
+import 'package:lab/models/hg_rayto.dart';
 import 'package:lab/models/paciente.dart';
 import 'package:lab/providers/url_provider.dart';
 import 'package:provider/provider.dart';
@@ -108,10 +109,9 @@ Future<HemogramaRayto> getHemogramaRayto(
   }
 }
 
-Future<void> gurdarHemograma(
-    BuildContext context, HemogramaRayto hemograma) async {
+Future<void> gurdarHemograma(BuildContext context, HRayto hrayto) async {
   final urlProvider = Provider.of<UrlProvider>(context, listen: false);
   final Uri url = Uri.parse('${urlProvider.url}getExamenesPaciente.php');
   late final http.Response response;
-  final String bodyData = json.encode(hemograma.toJson());
+  final String bodyData = json.encode(hrayto.toJson());
 }

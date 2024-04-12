@@ -7,7 +7,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-import 'package:lab/api/get_info_pacientes.dart';
+import 'package:lab/api/api_laboratorio.dart';
 import 'package:lab/functions/show_toast.dart';
 import 'package:lab/models/paciente.dart';
 import 'package:lab/providers/url_provider.dart';
